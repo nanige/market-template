@@ -3,6 +3,15 @@ import App from "./App.vue";
 import "reset-css";
 import request from "@/api/index";
 
+import VueLazyLoad from "vue-lazyload";
+
+Vue.use(VueLazyLoad, {
+  preLoad: 1.3,
+  error: "./assets/imgloaderror.png",
+  loading: "./assets/imgloading.jpg",
+  attempt: 1
+});
+
 Vue.prototype.$http = request;
 
 // fundebug配置
