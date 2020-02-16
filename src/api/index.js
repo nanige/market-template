@@ -1,16 +1,20 @@
+/**
+ * axios请求配置相关
+ * {export} 封装好的axios实例对象
+ */
+
 import axios from "axios";
 import Vue from "vue";
-import { baseUrl } from "../config/index";
+import { apiOrigin } from "@/utils/origin.js";
 import { Toast } from "vant";
 
 Vue.use(Toast);
 
 const timeout = 60000;
-// console.log(baseUrl);
 
 // 创建一个axios实例
 const request = axios.create({
-  baseURL: baseUrl + "/api_index.php",
+  baseURL: apiOrigin + "/api_index.php",
   timeout
 });
 
