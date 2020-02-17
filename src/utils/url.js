@@ -81,7 +81,7 @@ export function clearUrlQuery(key) {
 /**
  *
  * @param {String} key destiny： 当前url; par：要替换的参数key; prr_value：新值
- * @return {}无
+ * @return String
  * @description 替换url参数值
  */
 export function changeUrlParame(destiny, par, par_value) {
