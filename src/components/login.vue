@@ -23,7 +23,6 @@
               >区号
             </van-button> -->
           </van-field>
-          <!-- </div> -->
 
           <van-field
             v-model="formData.smsCode"
@@ -40,17 +39,8 @@
               plain
               type="default"
               @click="fetchsms"
-              v-if="!isDisabledSms"
-              >获取验证码</van-button
-            >
-            <van-button
-              slot="button"
-              size="mini"
-              type="default"
-              @click="fetchsms"
-              disabled
-              v-else
-              >{{ second }}秒后重新发送</van-button
+              :disabled="smsDisabled"
+              >{{smsBtnText}}</van-button
             >
           </van-field>
           <van-field
@@ -104,12 +94,13 @@ export default {
         presentId: getUrlQuery("presentId"),
         openid: this.openid
       },
-      second: 10,
+      smsBtnText: '获取验证码',
+      smsDisabled: false,
+      smsSecond60: 30,
       loading: {
         sms: false
       },
       countryCode: "",
-      isDisabledSms: false,
       show: false
     };
   },
@@ -134,8 +125,6 @@ export default {
     },
     // 获取验证码
     fetchsms: function() {
-      // console.log(this.formData.mobile);
-
       if (!this.formData.mobile || this.formData.mobile.length !== 11) {
         Toast("请输入正确手机号码");
         return;
@@ -145,6 +134,7 @@ export default {
         forbidClick: true,
         duration: 0
       });
+      this.disableSms60s();
       this.$http
         .post("index/sms/sends", {
           mobile: this.formData.mobile
@@ -171,6 +161,7 @@ export default {
         forbidClick: true,
         duration: 0
       });
+      
       this.$http
         .post("weixin/account/wxMobileBinding", {
           mobile: this.formData.mobile,
@@ -191,6 +182,19 @@ export default {
             Toast(res.msg);
           }
         });
+    },
+    disableSms60s:function() {
+        this.smsDisabled = true;
+        let inter  = setInterval(() => {
+          this.smsSecond60--;
+          this.smsBtnText = `${this.smsSecond60}秒后获取`
+          if(this.smsSecond60==0){
+            this.smsDisabled = false;
+            this.smsBtnText = '获取验证码'
+            this.smsSecond60 = 30;
+            clearInterval(inter)
+          }
+        }, 1000);
     }
   }
 };
