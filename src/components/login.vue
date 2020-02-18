@@ -21,7 +21,7 @@
           >
             <!-- <van-button slot="button" size="small" type="primary"
               >区号
-            </van-button> -->
+            </van-button>-->
           </van-field>
           <!-- </div> -->
 
@@ -41,8 +41,7 @@
               type="default"
               @click="fetchsms"
               v-if="!isDisabledSms"
-              >获取验证码</van-button
-            >
+            >获取验证码</van-button>
             <van-button
               slot="button"
               size="mini"
@@ -50,8 +49,7 @@
               @click="fetchsms"
               disabled
               v-else
-              >{{ second }}秒后重新发送</van-button
-            >
+            >{{ second }}秒后重新发送</van-button>
           </van-field>
           <van-field
             v-model="formData.password"
@@ -82,15 +80,28 @@ export default {
 
   props: {
     visible: {
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     openid: {
-      required: true
+      type: String
     },
     // 是否能关闭
     canClose: {
       default: true,
       type: Boolean
+    },
+
+    // 用以区分渠道来源的presentId
+    presentId: {
+      default: getUrlQuery("presentId"),
+      type: Number
+    },
+
+    // 绑定转介绍关系ID
+    inviteUid: {
+      default: getUrlQuery("inviteUid"),
+      type: Number
     }
   },
   data() {
@@ -101,7 +112,7 @@ export default {
         password: "",
         smsCode: "", //验证码
         areaCode: "",
-        presentId: getUrlQuery("presentId"),
+        presentId: this.presentId,
         openid: this.openid
       },
       second: 10,
@@ -160,12 +171,11 @@ export default {
         });
     },
     handlerLogin: function() {
-      var _hmt = window._hmt || [];
-      _hmt.push(["_trackEvent", "元宵节活动", "点击立即登录"]);
       if (!this.formData.mobile || this.formData.mobile.length !== 11) {
         Toast("请输入正确手机号码");
         return;
       }
+
       Toast.loading({
         message: "请求中...",
         forbidClick: true,
@@ -178,7 +188,7 @@ export default {
           smsCode: this.formData.smsCode,
           password: this.formData.password,
           openid: this.openid,
-          inviteUid: getUrlQuery("inviteUid")
+          inviteUid: this.inviteUid
         })
         .then(res => {
           // console.log(res);
@@ -186,7 +196,7 @@ export default {
           if (res.code == 200) {
             Toast.clear();
             Toast("登录成功");
-            this.$emit("success");
+            this.$emit("success", res);
           } else if (res.code == 201) {
             Toast(res.msg);
           }
