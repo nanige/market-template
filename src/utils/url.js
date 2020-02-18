@@ -77,3 +77,28 @@ export function clearUrlQuery(key) {
     );
   }
 }
+
+/**
+ *
+ * @param {String} key destiny： 当前url; par：要替换的参数key; prr_value：新值
+ * @return String
+ * @description 替换url参数值
+ */
+export function changeUrlParame(destiny, par, par_value) {
+  var pattern = par + '=([^&]*)';
+  var replaceText = par + '=' + par_value;
+  if (destiny.match(pattern)) {
+    var tmp = '/\\' + par + '=[^&]*/';
+    tmp = destiny.replace(eval(tmp), replaceText);
+    return (tmp);
+  }
+  else {
+    if (destiny.match('[\?]')) {
+      return destiny + '&' + replaceText;
+    }
+    else {
+      return destiny + '?' + replaceText;
+    }
+  }
+  return destiny + '\n' + par + '\n' + par_value;
+}
