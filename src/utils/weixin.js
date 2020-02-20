@@ -65,24 +65,24 @@ export function wxShare(
             desc,
             link,
             imgUrl,
-            trigger: function() {
+            trigger: function () {
               typeof onMenuShareTimelineTriggerCallback == "function"
                 ? onMenuShareTimelineTriggerCallback()
                 : "";
             },
-            success: function() {}
+            success: function () { }
           });
           wx.onMenuShareAppMessage({
             title,
             desc,
             link,
             imgUrl,
-            trigger: function() {
+            trigger: function () {
               typeof onMenuShareAppMessageTriggerCallback == "function"
                 ? onMenuShareAppMessageTriggerCallback()
                 : "";
             },
-            success: function() {}
+            success: function () { }
           });
         });
       }
@@ -151,14 +151,31 @@ function fetchUserInfo(code) {
 }
 
 // 分享link链接, userId必须传
-export function shareLink(userId) {
-  return (
-    encodeURI(
-      getJumpUrl() +
-        "/index/ad/ad_index/adId/12081?presentId=" +
-        getUrlQuery("presentId")
-    ) +
-    "&inviteUid=" +
-    userId
-  );
+export function shareLink({ userId, type = 'thisPage' }) {
+
+  const paramOps = ['thisPage', 'ad'];
+  if (!userId) {
+    alert('shareLink必传userId');
+    return
+  }
+  if (!paramOps.includes(type)) {
+    alert('可传入参数必须target为thisPage', 'ad')
+    return;
+  }
+
+  let presentId = getUrlQuery("presentId");
+  if (!presentId) {
+    alert('错误:url上presentId为空')
+    return;
+  }
+
+  if (type === 'ad') {
+    return getJumpUrl('www') + "/index/ad/ad_index/adId/12081?presentId=" + getUrlQuery("presentId") + "&inviteUid=" + userId
+  } else if (type === 'thisPage') {
+    let pathname = window.location.pathname;
+    let origin = window.location.origin;
+    return origin + pathname + "?presentId=" + getUrlQuery("presentId") + "&inviteUid=" + userId
+  }
+
+
 }
