@@ -6,6 +6,7 @@
       :visible.sync="isShow.login"
       @close="loginClose"
       :openid="userData.openid"
+      @success="loginSuccess"
     ></login>
   </div>
 </template>
@@ -33,7 +34,10 @@ export default {
     });
   },
   methods: {
-    loginClose() {}
+    loginClose() {},
+    loginSuccess(res) {
+      console.log(res);
+    }
   }
 };
 </script>

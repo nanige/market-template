@@ -21,7 +21,7 @@
           >
             <!-- <van-button slot="button" size="small" type="primary"
               >区号
-            </van-button> -->
+            </van-button>-->
           </van-field>
 
           <van-field
@@ -40,8 +40,7 @@
               type="default"
               @click="fetchsms"
               :disabled="smsDisabled"
-              >{{smsBtnText}}</van-button
-            >
+            >{{smsBtnText}}</van-button>
           </van-field>
           <van-field
             v-model="formData.password"
@@ -94,7 +93,7 @@ export default {
         presentId: getUrlQuery("presentId"),
         openid: this.openid
       },
-      smsBtnText: '获取验证码',
+      smsBtnText: "获取验证码",
       smsDisabled: false,
       smsSecond60: 30,
       loading: {
@@ -161,7 +160,7 @@ export default {
         forbidClick: true,
         duration: 0
       });
-      
+
       this.$http
         .post("weixin/account/wxMobileBinding", {
           mobile: this.formData.mobile,
@@ -183,18 +182,18 @@ export default {
           }
         });
     },
-    disableSms60s:function() {
-        this.smsDisabled = true;
-        let inter  = setInterval(() => {
-          this.smsSecond60--;
-          this.smsBtnText = `${this.smsSecond60}秒后获取`
-          if(this.smsSecond60==0){
-            this.smsDisabled = false;
-            this.smsBtnText = '获取验证码'
-            this.smsSecond60 = 30;
-            clearInterval(inter)
-          }
-        }, 1000);
+    disableSms60s: function() {
+      this.smsDisabled = true;
+      let inter = setInterval(() => {
+        this.smsSecond60--;
+        this.smsBtnText = `${this.smsSecond60}秒后再次获取`;
+        if (this.smsSecond60 == 0) {
+          this.smsDisabled = false;
+          this.smsBtnText = "获取验证码";
+          this.smsSecond60 = 30;
+          clearInterval(inter);
+        }
+      }, 1000);
     }
   }
 };
