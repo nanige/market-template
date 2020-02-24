@@ -1,10 +1,16 @@
 /**
+ * 
  * 操作url相关函数文件
- *
+ * {export} deleteUrlQuery 删除字符串href指定query的，不影响当前url
+ * {export} getUrlQuery 获取字符串href指定query的, 不影响当前url
+ * {export} clearUrlQuery 删除url指定query的， 直接操作url,且页面不会刷新
+ * {export} changeUrlParame 改变字符串href指定query的，不影响当前url
+ * 
  */
 
+
 /**
- *
+ * 删除字符串href指定query
  * @param {String} url 要删除的href, 一般为当前域名 window.location.href
  * @param {String} key 要删除的key
  * @return {String} 返回删除指定key后的href, 不会改变当前url
@@ -84,9 +90,11 @@ export function clearUrlQuery(key) {
  * @return String
  * @description 替换url参数值
  */
+
 export function changeUrlParame(url, arg, val) {
   var pattern = `${arg}=([^&]*)`;
   var replaceText = arg + "=" + val;
   var newUrl = url.match(pattern) ? url.replace(eval(`/(${arg}=)([^&]*)/gi`), replaceText) : (url.match(`[?]`) ? `${url}&${replaceText}` : `${url}?${replaceText}`);
   return newUrl;
 }
+
